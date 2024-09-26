@@ -785,9 +785,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpDir: {x: -6, y: 20, z: 0}
   jumpForce: 0
-  jumpForceMultiplier: 0.4
-  maxJumpForce: 0.4
-  minJumpForce: 0.15
+  jumpForceMultiplier: 0.6
+  maxJumpForce: 0.6
+  minJumpForce: 0.2
 --- !u!1 &1261899812
 GameObject:
   m_ObjectHideFlags: 0
