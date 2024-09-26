@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class Controller : MonoBehaviour
 {
+
+
     private Rigidbody rb;
     public Vector3 jumpDir;
     [SerializeField] public float jumpForce, jumpForceMultiplier, maxJumpForce, minJumpForce;
@@ -26,10 +28,12 @@ public class Controller : MonoBehaviour
    
     void Update()
     {
-        Restart();
+        
 
         isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundCheckLayerMask);
-        Debug.DrawLine(groundCheck.position, groundCheck.position - new Vector3(0,groundCheckRadius,0), Color.yellow); //Draw Ground Check Radius
+
+        //Draw Ground Check Radius
+        Debug.DrawLine(groundCheck.position, groundCheck.position - new Vector3(0,groundCheckRadius,0), Color.yellow); 
 
         //Increase Jump Force While Pressed, After Certain Time Release Automatically
         if (Input.GetMouseButton(0) && isGrounded)
@@ -60,14 +64,5 @@ public class Controller : MonoBehaviour
        
     }
 
-    private void Restart()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-
-            SceneManager.LoadScene(0);
-
-        }
-
-    }
+    
 }
