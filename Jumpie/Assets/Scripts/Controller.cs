@@ -29,10 +29,10 @@ public class Controller : MonoBehaviour
         Restart();
 
         isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundCheckLayerMask);
-        Debug.DrawRay(groundCheck.position, Vector3.up * -1, Color.yellow); //Draw Ground Check Radius
+        Debug.DrawLine(groundCheck.position, groundCheck.position - new Vector3(0,groundCheckRadius,0), Color.yellow); //Draw Ground Check Radius
 
         //Increase Jump Force While Pressed, After Certain Time Release Automatically
-        if (Input.GetKey(KeyCode.W) && isGrounded)
+        if (Input.GetMouseButton(0) && isGrounded)
         {
             jumpForce += jumpForceMultiplier * Time.deltaTime;
             
@@ -44,7 +44,7 @@ public class Controller : MonoBehaviour
 
 
         //When Press Is Released
-        if (Input.GetKeyUp(KeyCode.W)) if (isGrounded) Jump();
+        if (Input.GetMouseButtonUp(0)) if (isGrounded) Jump();
       
     }
 
