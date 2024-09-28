@@ -8,15 +8,8 @@ public class ForceIndicator : MonoBehaviour
 {
 
     public Image forceIndicatorImg;
-    public Controller characterController;
+    [SerializeField] private Controller characterController;
 
-
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
         
