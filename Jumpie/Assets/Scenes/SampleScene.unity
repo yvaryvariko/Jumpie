@@ -857,13 +857,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b18ead91f81c194280078f9b2c53362, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpDir: {x: -6, y: 20, z: 0}
+  jumpDir: {x: 6, y: 20, z: 0}
+  jumpDirAmount: 0
   jumpForce: 0
   jumpForceMultiplier: 0.7
   maxJumpForce: 0.6
   minJumpForce: 0.15
-  groundCheck: {fileID: 994568870}
-  groundCheckRadius: 0.6
+  groundCheck: {fileID: 1858918732}
+  groundCheckRadius: 0.18
   groundCheckLayerMask:
     serializedVersion: 2
     m_Bits: 64
