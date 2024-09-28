@@ -10,7 +10,6 @@ public class Controller : MonoBehaviour
 
     private Rigidbody rb;
     public Vector3 jumpDir;
-    [SerializeField] private float jumpDirAmount;
     [SerializeField] public float jumpForce, jumpForceMultiplier, maxJumpForce, minJumpForce;
    
 
@@ -21,23 +20,33 @@ public class Controller : MonoBehaviour
 
 
     void Start()
-    {
-        jumpDirAmount = jumpDir.x;
+    {       
         jumpForce = 0;
         rb = GetComponent<Rigidbody>();
     }
 
-   
-    void FixedUpdate()
+
+
+    private void Update()
     {
-        
+        HandleInput();
+
+        Debug.DrawLine(groundCheck.position, groundCheck.position - new Vector3(0, groundCheckRadius, 0), Color.yellow);  //Draw Ground Check Radius
+    }
+
+
+
+    void FixedUpdate()
+    {     
 
         isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundCheckLayerMask);
+        
+    }
 
 
-        Debug.DrawLine(groundCheck.position, groundCheck.position - new Vector3(0,groundCheckRadius,0), Color.yellow);  //Draw Ground Check Radius
-
-        //Increase Jump Force While Pressed, After Certain Time Release Automatically
+    
+    void HandleInput()
+    {
         if (Input.GetMouseButton(0) && isGrounded)
         {
 
@@ -45,7 +54,7 @@ public class Controller : MonoBehaviour
 
             if (mousePositionOnScreen.x < Screen.width / 2f)  //check on which side mouse was pressed and change Jump Direction Accordingly
             {
-                jumpDir.x = Mathf.Abs(jumpDir.x) * -1f;
+                jumpDir.x = -Mathf.Abs(jumpDir.x);
             }
             else
             {
@@ -54,9 +63,10 @@ public class Controller : MonoBehaviour
             }
 
 
-            jumpForce += jumpForceMultiplier * Time.deltaTime;
-            
-            if(jumpForce >= maxJumpForce)
+            jumpForce = Mathf.Clamp(jumpForce + jumpForceMultiplier * Time.deltaTime, minJumpForce, maxJumpForce);  //calculate Jumpforce
+
+
+            if (jumpForce >= maxJumpForce)
             {
                 Jump();
             }
@@ -64,21 +74,25 @@ public class Controller : MonoBehaviour
 
 
         //When Press Is Released
-        if (Input.GetMouseButtonUp(0)) if (isGrounded) Jump();
-      
+        if (Input.GetMouseButtonUp(0) && isGrounded)
+        {
+
+            Jump();
+
+        }
+
+
     }
-
-
 
     private void Jump()
     {
-        if (jumpForce > maxJumpForce) jumpForce = maxJumpForce;
-        if (jumpForce < minJumpForce) jumpForce = minJumpForce;
+
+
 
         rb.velocity = Vector3.zero;
-        rb.AddForce(jumpDir * jumpForce, ForceMode.Impulse);      
+        rb.AddForce(jumpDir * jumpForce, ForceMode.Impulse);
         jumpForce = 0f;
-       
+
     }
 
 }
