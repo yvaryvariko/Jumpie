@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+
 
 public class Controller : MonoBehaviour
 {
@@ -23,6 +20,9 @@ public class Controller : MonoBehaviour
     {       
         jumpForce = 0;
         rb = GetComponent<Rigidbody>();
+        Application.targetFrameRate = 60;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+
     }
 
 
