@@ -1,37 +1,40 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+
 
 public class Controller : MonoBehaviour
 {
 
 
-    private Rigidbody rb;
     public Vector3 jumpDir;
-    [SerializeField] public float jumpForce, jumpForceMultiplier, maxJumpForce, minJumpForce;
-   
+    public float jumpForce, jumpForceMultiplier, maxJumpForce, minJumpForce;
+    public ForceIndicator forceIndicatorScript;
 
+    [SerializeField] private Canvas forceIndicatorCanvas;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundCheckRadius;
     [SerializeField] private LayerMask groundCheckLayerMask;
     [SerializeField] private bool isGrounded;
 
 
+
+    private Rigidbody rb;
+
+
     void Start()
     {       
         jumpForce = 0;
         rb = GetComponent<Rigidbody>();
+        Application.targetFrameRate = 60;
+        forceIndicatorCanvas.gameObject.SetActive(false);
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+
     }
 
 
 
     private void Update()
     {
-        HandleInput();
-
-        Debug.DrawLine(groundCheck.position, groundCheck.position - new Vector3(0, groundCheckRadius, 0), Color.yellow);  //Draw Ground Check Radius
+        HandleInput();      
     }
 
 
@@ -49,6 +52,7 @@ public class Controller : MonoBehaviour
     {
         if (Input.GetMouseButton(0) && isGrounded)
         {
+            forceIndicatorCanvas.gameObject.SetActive(true);
 
             Vector2 mousePositionOnScreen = Input.mousePosition; //get mouse position on screen
 
@@ -58,7 +62,6 @@ public class Controller : MonoBehaviour
             }
             else
             {
-
                 jumpDir.x = Mathf.Abs(jumpDir.x);
             }
 
@@ -73,12 +76,11 @@ public class Controller : MonoBehaviour
         }
 
 
-        //When Press Is Released
+        //When Finger Is Released
         if (Input.GetMouseButtonUp(0) && isGrounded)
         {
 
             Jump();
-
         }
 
 
@@ -87,11 +89,11 @@ public class Controller : MonoBehaviour
     private void Jump()
     {
 
-
-
         rb.velocity = Vector3.zero;
         rb.AddForce(jumpDir * jumpForce, ForceMode.Impulse);
         jumpForce = 0f;
+        forceIndicatorScript.forceIndicatorImg.fillAmount = jumpForce;
+        forceIndicatorCanvas.gameObject.SetActive(false);
 
     }
 
