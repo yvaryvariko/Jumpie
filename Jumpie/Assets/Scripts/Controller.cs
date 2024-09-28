@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class Controller : MonoBehaviour
 {
+
+
     private Rigidbody rb;
     public Vector3 jumpDir;
     [SerializeField] public float jumpForce, jumpForceMultiplier, maxJumpForce, minJumpForce;
@@ -18,25 +20,53 @@ public class Controller : MonoBehaviour
 
 
     void Start()
-    {
+    {       
         jumpForce = 0;
         rb = GetComponent<Rigidbody>();
     }
 
-   
-    void Update()
+
+
+    private void Update()
     {
-        Restart();
+        HandleInput();
+
+        Debug.DrawLine(groundCheck.position, groundCheck.position - new Vector3(0, groundCheckRadius, 0), Color.yellow);  //Draw Ground Check Radius
+    }
+
+
+
+    void FixedUpdate()
+    {     
 
         isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundCheckLayerMask);
-        Debug.DrawRay(groundCheck.position, Vector3.up * -1, Color.yellow); //Draw Ground Check Radius
+        
+    }
 
-        //Increase Jump Force While Pressed, After Certain Time Release Automatically
-        if (Input.GetKey(KeyCode.W) && isGrounded)
+
+    
+    void HandleInput()
+    {
+        if (Input.GetMouseButton(0) && isGrounded)
         {
-            jumpForce += jumpForceMultiplier * Time.deltaTime;
-            
-            if(jumpForce >= maxJumpForce)
+
+            Vector2 mousePositionOnScreen = Input.mousePosition; //get mouse position on screen
+
+            if (mousePositionOnScreen.x < Screen.width / 2f)  //check on which side mouse was pressed and change Jump Direction Accordingly
+            {
+                jumpDir.x = -Mathf.Abs(jumpDir.x);
+            }
+            else
+            {
+
+                jumpDir.x = Mathf.Abs(jumpDir.x);
+            }
+
+
+            jumpForce = Mathf.Clamp(jumpForce + jumpForceMultiplier * Time.deltaTime, minJumpForce, maxJumpForce);  //calculate Jumpforce
+
+
+            if (jumpForce >= maxJumpForce)
             {
                 Jump();
             }
@@ -44,30 +74,25 @@ public class Controller : MonoBehaviour
 
 
         //When Press Is Released
-        if (Input.GetKeyUp(KeyCode.W)) if (isGrounded) Jump();
-      
+        if (Input.GetMouseButtonUp(0) && isGrounded)
+        {
+
+            Jump();
+
+        }
+
+
     }
 
     private void Jump()
     {
-        if (jumpForce > maxJumpForce) jumpForce = maxJumpForce;
-        if (jumpForce < minJumpForce) jumpForce = minJumpForce;
+
+
 
         rb.velocity = Vector3.zero;
         rb.AddForce(jumpDir * jumpForce, ForceMode.Impulse);
-        jumpDir.x *= -1f;
         jumpForce = 0f;
-       
-    }
-
-    private void Restart()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-
-            SceneManager.LoadScene(0);
-
-        }
 
     }
+
 }
