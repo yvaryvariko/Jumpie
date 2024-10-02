@@ -13,6 +13,6 @@ public class ScoreDisplay : MonoBehaviour
     {
         float score = playerTransform.transform.position.y * 10;
 
-        scoreText.text = Mathf.CeilToInt(score).ToString();
+        scoreText.text = Mathf.RoundToInt(score).ToString();
     }
 }

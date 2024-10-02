@@ -7,7 +7,7 @@ public class Controller : MonoBehaviour
 
     public Vector3 jumpDir;
     public float jumpForce, jumpForceMultiplier, maxJumpForce, minJumpForce;
-    public ForceIndicator forceIndicatorScript;
+    
 
     [SerializeField] private Canvas forceIndicatorCanvas;
     [SerializeField] private Transform groundCheck;
@@ -91,8 +91,7 @@ public class Controller : MonoBehaviour
 
         rb.velocity = Vector3.zero;
         rb.AddForce(jumpDir * jumpForce, ForceMode.Impulse);
-        jumpForce = 0f;
-        forceIndicatorScript.forceIndicatorImg.fillAmount = jumpForce;
+        jumpForce = 0f;       
         forceIndicatorCanvas.gameObject.SetActive(false);
 
     }
